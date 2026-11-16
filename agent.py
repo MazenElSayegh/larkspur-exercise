@@ -44,6 +44,50 @@ def seats_left(flight_no: str, date: str) -> Dict[str, Any]:
     return {"flight_no": flight_no, "date": date,
             "error": "No flights.csv record for that flight number and date."}
 
+def care_entitlements() -> Dict[str, Any]:
+    """Retrieve care rules from the exercise's local sources, without side effects."""
+    import json
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent
+    policy_paths = sorted(root.rglob("disruption_policy.json"))
+    handbook_paths = sorted(
+        path for path in root.rglob("*")
+        if path.is_file() and "handbook" in path.stem.lower()
+        and path.suffix.lower() in {".md", ".txt", ".markdown"}
+    )
+    if len(policy_paths) != 1 or len(handbook_paths) != 1:
+        return {"error": "Expected one disruption_policy.json and one text/Markdown Handbook; care rules unavailable."}
+
+    policy_path, handbook_path = policy_paths[0], handbook_paths[0]
+    policy = json.loads(policy_path.read_text(encoding="utf-8-sig"))
+    handbook = handbook_path.read_text(encoding="utf-8-sig")
+    heading = re.search(
+        r"^(?P<level>#{1,6})?[ \t]*(?:Section[ \t]+)?6\b[.):\-–— \t]*"
+        r"(?:\*\*)?Care while you wait\b[^\n]*$",
+        handbook, re.IGNORECASE | re.MULTILINE,
+    )
+    if heading is None:
+        return {"error": "Handbook section 6, 'Care while you wait', was not found."}
+
+    # Keep subsections, stopping at the next peer/parent Markdown heading or
+    # the next numbered top-level section in a plain-text Handbook.
+    level = heading.group("level")
+    boundary = (
+        rf"^#{{1,{len(level)}}}[ \t]+"
+        if level else r"^[ \t]*(?:Section[ \t]+)?[7-9]\d*\b[.):\-–— \t]+[^\n]*$"
+    )
+    remainder = handbook[heading.end():]
+    following = re.search(boundary, remainder, re.IGNORECASE | re.MULTILINE)
+    end = heading.end() + following.start() if following else len(handbook)
+    return {
+        "disruption_policy": {"source": str(policy_path.relative_to(root)), "content": policy},
+        "handbook_section_6": {
+            "source": str(handbook_path.relative_to(root)),
+            "content": handbook[heading.start():end].strip(),
+        },
+    }
 
 MAX_TOOL_CALLS = 8  # Larkspur's own build capped the loop here; then a human takes over.
 
@@ -103,11 +147,25 @@ EXTRA_TOOLS: List[Dict[str, Any]] = [
             "required": ["flight_no", "date"],
         },
     },
+    {
+        "name": "care_entitlements",
+        "description": (
+            "Read disruption_policy.json and section 6 of the Handbook, 'Care while "
+            "you wait' when a user is disrupted, delayed, or otherwise inconvenienced. "
+            "Returns source text for determining meal, hotel, and ground "
+            "care entitlements. Use verified booking and disruption details with "
+            "these rules; do not invent eligibility or amounts. This read-only tool "
+            "does not require a seat hold or confirmation token, issue vouchers, "
+            "or replace check_policy and its policy_row_id."
+        ),
+        "input_schema": {"type": "object", "properties": {}, "additionalProperties": False},
+    }
 ]   # ✏️ Build 2, step 2.1: schemas for the tools you add
 LOCAL_TOOLS: Dict[str, Any] = {
     "fare_rules": fare_rules,
     "next_available_day": next_available_day,
     "seats_left": seats_left,
+    "care_entitlements": care_entitlements
 }         # ✏️ Build 2, step 2.1: the functions behind them
 
 
