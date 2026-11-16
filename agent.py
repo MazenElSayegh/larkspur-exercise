@@ -9,6 +9,7 @@ Where you edit:   grep -n '✏' agent.py   (six marks, one per place)
 Steps and gates:  https://anthropicpartnerbasecamp.bts.com/
 """
 from __future__ import annotations
+import csv
 import re
 from pathlib import Path
 from typing import Any, Dict, List
@@ -17,6 +18,7 @@ from support import (MODEL, SYSTEM_PROMPT, call_local, execute_tool, mcp_client,
                      runtime_preamble)
 
 HANDBOOK_PATH = Path(__file__).resolve().parent / "data" / "americas" / "fare_rules_excerpt.md"
+FLIGHTS_PATH = Path(__file__).resolve().parent / "data" / "americas" / "flights.csv"
 
 
 def fare_rules(query: str) -> Dict[str, Any]:
@@ -26,6 +28,21 @@ def fare_rules(query: str) -> Dict[str, Any]:
     words = query.lower().split()
     matches = [s.strip() for s in sections if any(w in s.lower() for w in words)]
     return {"query": query, "sections": matches or ["No matching section found."]}
+
+
+def seats_left(flight_no: str, date: str) -> Dict[str, Any]:
+    """Look up remaining Economy (Y) and Business (J) seats on one flight/date."""
+    with open(FLIGHTS_PATH, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            if row["flight_no"] == flight_no and row["date"] == date:
+                return {
+                    "flight_no": flight_no,
+                    "date": date,
+                    "seats_left_Y": int(row["seats_left_Y"]),
+                    "seats_left_J": int(row["seats_left_J"]),
+                }
+    return {"flight_no": flight_no, "date": date,
+            "error": "No flights.csv record for that flight number and date."}
 
 
 MAX_TOOL_CALLS = 8  # Larkspur's own build capped the loop here; then a human takes over.
@@ -67,10 +84,30 @@ EXTRA_TOOLS: List[Dict[str, Any]] = [
             "required": ["origin", "dest", "date"],
         },
     },
+    {
+        "name": "seats_left",
+        "description": (
+            "Check how many seats remain in Economy (Y) and Business (J) on one "
+            "flight and date, e.g. to answer 'is there room on that flight for "
+            "the three of us?' flight_no and date come from get_flight_status or "
+            "search_alternatives, not asked of the customer. Returns raw seat "
+            "counts for both cabins; compare against the party size yourself to "
+            "answer whether there's room."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "flight_no": {"type": "string"},
+                "date": {"type": "string", "description": "YYYY-MM-DD"},
+            },
+            "required": ["flight_no", "date"],
+        },
+    },
 ]   # ✏️ Build 2, step 2.1: schemas for the tools you add
 LOCAL_TOOLS: Dict[str, Any] = {
     "fare_rules": fare_rules,
     "next_available_day": next_available_day,
+    "seats_left": seats_left,
 }         # ✏️ Build 2, step 2.1: the functions behind them
 
 
