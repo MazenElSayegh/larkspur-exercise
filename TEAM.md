@@ -11,7 +11,7 @@ teammate, starting with `- `. Commit the file once. Nobody else changes it.
 The review reads these names. Nothing else comes off the list. Your team still
 decides in the moment who does what.
 
-- Mazen ElSayegh
+- basalt-3b1d (Mazen ElSayegh)
 - Ahmed Al Deeb
 - Abdelrahman Sherif
 - khadija khaled
