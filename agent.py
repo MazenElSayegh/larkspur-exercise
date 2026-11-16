@@ -53,9 +53,24 @@ EXTRA_TOOLS: List[Dict[str, Any]] = [
             "required": ["query"],
         },
     },
+    {
+        "name": "next_available_day",
+        "description": "Find the next available day with an open seat for the given route and cabin.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "origin": {"type": "string"},
+                "dest": {"type": "string"},
+                "date": {"type": "string", "format": "date"},
+                "cabin": {"type": "string", "enum": ["Y", "J"]},
+            },
+            "required": ["origin", "dest", "date"],
+        },
+    },
 ]   # ✏️ Build 2, step 2.1: schemas for the tools you add
 LOCAL_TOOLS: Dict[str, Any] = {
     "fare_rules": fare_rules,
+    "next_available_day": next_available_day,
 }         # ✏️ Build 2, step 2.1: the functions behind them
 
 
