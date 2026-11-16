@@ -9,16 +9,54 @@ Where you edit:   grep -n '✏' agent.py   (six marks, one per place)
 Steps and gates:  https://anthropicpartnerbasecamp.bts.com/
 """
 from __future__ import annotations
+import re
+from pathlib import Path
 from typing import Any, Dict, List
 from support import (MODEL, SYSTEM_PROMPT, call_local, execute_tool, mcp_client,
                      new_session, next_available_day, record_tool_result,
                      runtime_preamble)
 
+HANDBOOK_PATH = Path(__file__).resolve().parent / "data" / "americas" / "fare_rules_excerpt.md"
+
+
+def fare_rules(query: str) -> Dict[str, Any]:
+    """Search the fare rules handbook for the section(s) matching query keywords."""
+    text = HANDBOOK_PATH.read_text()
+    sections = re.split(r"(?m)^(?=### )", text)
+    words = query.lower().split()
+    matches = [s.strip() for s in sections if any(w in s.lower() for w in words)]
+    return {"query": query, "sections": matches or ["No matching section found."]}
+
+
 MAX_TOOL_CALLS = 8  # Larkspur's own build capped the loop here; then a human takes over.
 
 TONE_ADDENDUM = ""                       # ✏️ Build 4, step 4.1, intelligence goal
-EXTRA_TOOLS: List[Dict[str, Any]] = []   # ✏️ Build 2, step 2.1: schemas for the tools you add
-LOCAL_TOOLS: Dict[str, Any] = {}         # ✏️ Build 2, step 2.1: the functions behind them
+EXTRA_TOOLS: List[Dict[str, Any]] = [
+    {
+        "name": "fare_rules",
+        "description": (
+            "Search Larkspur's fare rules handbook for the passage that answers a "
+            "customer's question about fare rules, care entitlements, or what chat "
+            "automation can and can't do (e.g. 'hotel overnight', 'refund basic fare', "
+            "'same-day change'). Returns the matching section's text, the same for every "
+            "customer. For this specific customer's actual entitlement in dollars, use "
+            "check_policy instead."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Keywords from the customer's question, e.g. 'hotel overnight'.",
+                },
+            },
+            "required": ["query"],
+        },
+    },
+]   # ✏️ Build 2, step 2.1: schemas for the tools you add
+LOCAL_TOOLS: Dict[str, Any] = {
+    "fare_rules": fare_rules,
+}         # ✏️ Build 2, step 2.1: the functions behind them
 
 
 def text_of(response) -> str:
