@@ -14,5 +14,5 @@ decides in the moment who does what.
 - Mazen Elsayegh
 - Ahmed Al Deeb
 - Abdelrahman Sherif
-- Khadija Khaled
+- khadija khaled
 - Daniela Bellini
