@@ -119,14 +119,22 @@ def build_tools() -> List[Dict[str, Any]]:                 # ✏️ Build 1, ste
                 "type": "object",
                 "properties": {
                     "flight_no": {"type": "string"},
-                    "date": {"type": "string", "description": "MM/DD/YYYY"},
+                    "date": {"type": "string", "description": "YYYY-MM-DD"},
                 },
                 "required": ["flight_no", "date"],
             },
         },
         {
             "name": "search_alternatives",
-            "description": "search",
+            "description": (
+                "Find rebooking options for the disrupted segment on this PNR. Takes only "
+                "the PNR; origin, destination, date, cabin, and passenger count are derived "
+                "from the booking itself, and the disrupted flight is excluded automatically. "
+                "Returns up to seven options filtered for seat availability, any that were "
+                "excluded and why, and alternatives in other cabins. Call this after "
+                "get_flight_status confirms the segment is disrupted. An option's id from "
+                "here is what hold_seat and check_policy's chosen_option_id refer to."
+            ),
             "input_schema": {
                 "type": "object",
                 "properties": {"pnr": {"type": "string"}},
