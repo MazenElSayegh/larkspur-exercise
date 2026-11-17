@@ -38,7 +38,7 @@ th { background: #f4eee4; font-size: 12px; letter-spacing: .05em; text-transform
 .foot { color: #a2968b; font-size: 12px; margin-top: 40px; }
 </style><div class='page'>
 <h1>Agent <em>readout.</em></h1>
-<p class='sub'>Team Room 6 · 2026-11-17 10:25</p>
+<p class='sub'>Team Room 6 · 2026-11-17 11:34</p>
 <h2>Architecture: what the agent is</h2>
 <div class='strip'>
 <div class='stat'><b>13</b><span>tools offered</span></div>
@@ -60,8 +60,8 @@ th { background: #f4eee4; font-size: 12px; letter-spacing: .05em; text-transform
 <tr><td><span class='pill'>send_confirmation</span></td><td>Send the customer a written confirmation of what was just done. Benign.</td><td>71</td><td></td></tr>
 <tr class='yours'><td><span class='pill'>next_available_day</span></td><td>Answer the first question a cancelled or stranded Larkspur customer asks: what is the soonest day you can actu</td><td>628</td><td><span class='pill you'>via mcp</span></td></tr>
 <tr class='yours'><td><span class='pill'>fare_rules</span></td><td>Return the Larkspur Customer Commitment and fare rules text behind an entitlement decision, straight from the </td><td>578</td><td><span class='pill you'>via mcp</span></td></tr>
-<tr class='yours'><td><span class='pill'>seats_left</span></td><td>Check how many seats remain in Economy (Y) and Business (J) on one flight and date, e.g. to answer &#x27;is there r</td><td>361</td><td><span class='pill you'>yours</span></td></tr>
-<tr class='yours'><td><span class='pill'>care_entitlements</span></td><td>Read disruption_policy.json and section 6 of the Handbook, &#x27;Care while you wait&#x27; when a user is disrupted, del</td><td>458</td><td><span class='pill you'>yours</span></td></tr>
+<tr class='yours'><td><span class='pill'>seats_left</span></td><td>Check how many seats remain in Economy (Y) and Business (J) on one flight and date, e.g. to answer &#x27;is there r</td><td>811</td><td><span class='pill you'>yours</span></td></tr>
+<tr class='yours'><td><span class='pill'>care_entitlements</span></td><td>Read disruption_policy.json and section 6 of the Handbook, &#x27;Care while you wait&#x27;, to answer a customer&#x27;s gener</td><td>902</td><td><span class='pill you'>yours</span></td></tr>
 </table>
 <p class='sub'>2 of those 13 tools are served by support/mcp_server.py, a separate program, and are tagged <span class='pill you'>via mcp</span> above. Claude cannot tell: same name, same description, same tokens.</p>
 <p class='sub'>local dispatch: <span class='pill you'>care_entitlements</span>, <span class='pill you'>seats_left</span></p>
@@ -85,37 +85,36 @@ th { background: #f4eee4; font-size: 12px; letter-spacing: .05em; text-transform
 <p class='sub'>Trace shown: one conversation, the last one you ran · trace: .workshop/last_trace.json</p>
 <div class='strip'>
 <div class='stat'><b>4</b><span>API turns</span></div>
-<div class='stat'><b>4</b><span>tool calls</span></div>
-<div class='stat'><b>18,729</b><span>tokens in</span></div>
-<div class='stat'><b>1,332</b><span>tokens out</span></div>
-<div class='stat'><b>15.0s</b><span>wall clock</span></div>
+<div class='stat'><b>3</b><span>tool calls</span></div>
+<div class='stat'><b>2,692</b><span>tokens in</span></div>
+<div class='stat'><b>985</b><span>tokens out</span></div>
+<div class='stat'><b>12.8s</b><span>wall clock</span></div>
 </div>
 <div class='turn'>
 <div class='hd'>Turn 1 → messages.create()</div>
 <div class='meta'>sent: 1 msg in context · 13 tools offered</div>
-<div class='meta'>← stop_reason=<b>tool_use</b> · blocks: tool_use · in 3,892 / out 84 · 1.8s</div>
-<div class='tool'>⚙ lookup_booking({&quot;pnr&quot;: &quot;P5QS2W&quot;, &quot;last_name&quot;: &quot;Castellanos&quot;})</div>
+<div class='meta'>← stop_reason=<b>tool_use</b> · blocks: tool_use · in 114 / out 83 · 1.5s</div>
+<div class='tool'>⚙ lookup_booking({&quot;pnr&quot;: &quot;T9WN4C&quot;, &quot;last_name&quot;: &quot;Zhang&quot;})</div>
 </div>
 <div class='loopback'>↺ stop_reason=tool_use → results appended → loop continues</div>
 <div class='turn'>
 <div class='hd'>Turn 2 → messages.create()</div>
 <div class='meta'>sent: 3 msg in context · 13 tools offered</div>
-<div class='meta'>← stop_reason=<b>tool_use</b> · blocks: tool_use · in 4,272 / out 81 · 2.6s</div>
-<div class='tool'>⚙ get_flight_status({&quot;flight_no&quot;: &quot;LK414&quot;, &quot;date&quot;: &quot;2025-05-08&quot;})</div>
+<div class='meta'>← stop_reason=<b>tool_use</b> · blocks: tool_use · in 449 / out 81 · 1.4s</div>
+<div class='tool'>⚙ get_flight_status({&quot;flight_no&quot;: &quot;LK108&quot;, &quot;date&quot;: &quot;2025-05-08&quot;})</div>
 </div>
 <div class='loopback'>↺ stop_reason=tool_use → results appended → loop continues</div>
 <div class='turn'>
 <div class='hd'>Turn 3 → messages.create()</div>
 <div class='meta'>sent: 5 msg in context · 13 tools offered</div>
-<div class='meta'>← stop_reason=<b>tool_use</b> · blocks: tool_use, tool_use · in 4,590 / out 186 · 1.8s</div>
-<div class='tool'>⚙ check_policy({&quot;pnr&quot;: &quot;P5QS2W&quot;, &quot;cause_code&quot;: &quot;WX&quot;, &quot;delay_minutes&quot;: 0, &quot;status&quot;: &quot;CANCELLED&quot;})</div>
-<div class='tool'>⚙ search_alternatives({&quot;pnr&quot;: &quot;P5QS2W&quot;})</div>
+<div class='meta'>← stop_reason=<b>tool_use</b> · blocks: tool_use · in 758 / out 131 · 1.2s</div>
+<div class='tool'>⚙ check_policy({&quot;pnr&quot;: &quot;T9WN4C&quot;, &quot;cause_code&quot;: &quot;WX&quot;, &quot;delay_minutes&quot;: 150, &quot;status&quot;: &quot;DELAYED&quot;})</div>
 </div>
 <div class='loopback'>↺ stop_reason=tool_use → results appended → loop continues</div>
 <div class='turn done'>
 <div class='hd'>Turn 4 → messages.create()</div>
 <div class='meta'>sent: 7 msg in context · 13 tools offered</div>
-<div class='meta'>← stop_reason=<b class='stopped'>end_turn</b> · blocks: thinking, text · in 5,975 / out 981 · 7.9s</div>
+<div class='meta'>← stop_reason=<b class='stopped'>end_turn</b> · blocks: thinking, text · in 1,371 / out 690 · 6.6s</div>
 </div>
 <p class='foot'>Generated by readout.py · Larkspur Airlines is a fictional training scenario · Confidential / do not distribute</p></div>
-<script type="application/json" id="evidence">{"generated": "2026-11-17T10:25:12", "pod": "Room 6", "banked_by": "Mark", "banked": {"1.2": "F10-C6F", "1.3": "028-BA8", "1.4": "4E8-1CB", "2.1": "670-363", "2.2": "2ED-86F"}, "trace": {"turns": 4, "tool_calls": 4, "tool_names": ["lookup_booking", "get_flight_status", "check_policy", "search_alternatives"], "saw_thinking": true, "used_format": false, "used_tool_choice_none": false, "streamed": false, "deltas_seen": 0, "tokens": {"input": 18729, "output": 1332, "cache_read": 0, "cache_write": 0}, "cache_hit_ratio": null, "elapsed": 15.0}, "all_shapes": {"attempted": 5, "shapes": 5, "failed": 0, "resolved": 5, "turns": 21, "tool_calls": 17, "tokens_in": 96257, "tokens_out": 4917, "cache_read": 0, "unfinished": [], "errors": []}}</script>
+<script type="application/json" id="evidence">{"generated": "2026-11-17T11:34:04", "pod": "Room 6", "banked_by": "Mark", "banked": {"1.2": "F10-C6F", "1.3": "028-BA8", "1.4": "4E8-1CB", "2.1": "670-363", "2.2": "2ED-86F", "3.1": "9EF-619"}, "trace": {"turns": 4, "tool_calls": 3, "tool_names": ["lookup_booking", "get_flight_status", "check_policy"], "saw_thinking": true, "used_format": false, "used_tool_choice_none": false, "streamed": false, "deltas_seen": 0, "tokens": {"input": 2692, "output": 985, "cache_read": 0, "cache_write": 16020}, "cache_hit_ratio": 0.0, "elapsed": 12.8}, "all_shapes": {"attempted": 5, "shapes": 5, "failed": 0, "resolved": 5, "turns": 21, "tool_calls": 17, "tokens_in": 96257, "tokens_out": 4917, "cache_read": 0, "unfinished": [], "errors": []}}</script>

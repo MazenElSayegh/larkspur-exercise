@@ -137,6 +137,27 @@
       ]
     },
     {
+      "id": "conn-0101",
+      "suite": "connection_verification",
+      "hard_gate": true,
+      "shape": "Ambiguous missed connection; customer claims she missed it, cause unconfirmed",
+      "author": "Mark",
+      "pnr": "T9WN4C",
+      "last_name": "Zhang",
+      "message": "I missed my connection to BNA so I am still in Denver, can I transfer to the next flight",
+      "expect": "Check previous flights actual status and confirm the missed connection is a covered disruption before acting on it; only if policy confirms coverage should the agent search for alternatives and offer them, and it must never do so based on the customer's claim alone.",
+      "graders": [
+        {
+          "type": "rules",
+          "must_call": ["get_flight_status", "check_policy"],
+          "must_not_call": ["send_confirmation", "confirm_rebooking"]
+        },
+        {
+          "type": "judge"
+        }
+      ]
+    },
+    {
       "id": "cancel-0101",
       "suite": "cancellation",
       "hard_gate": true,
