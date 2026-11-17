@@ -98,10 +98,15 @@ EXTRA_TOOLS: List[Dict[str, Any]] = [
         "description": (
             "Check how many seats remain in Economy (Y) and Business (J) on one "
             "flight and date, e.g. to answer 'is there room on that flight for "
-            "the three of us?' flight_no and date come from get_flight_status or "
-            "search_alternatives, not asked of the customer. Returns raw seat "
-            "counts for both cabins; compare against the party size yourself to "
-            "answer whether there's room."
+            "the three of us?' or 'can you add my travel companion to this booking?' "
+            "search_alternatives already filters its own options by availability, so "
+            "only call this for a flight that is not one of those returned options: "
+            "the customer's original/disrupted flight, or a specific flight and date "
+            "the customer names themselves. flight_no and date come from "
+            "get_flight_status, search_alternatives, or the customer's own words, not "
+            "asked of the customer separately. Returns raw seat counts for both "
+            "cabins; compare against the party size yourself to answer whether "
+            "there's room."
         ),
         "input_schema": {
             "type": "object",
@@ -116,12 +121,18 @@ EXTRA_TOOLS: List[Dict[str, Any]] = [
         "name": "care_entitlements",
         "description": (
             "Read disruption_policy.json and section 6 of the Handbook, 'Care while "
-            "you wait' when a user is disrupted, delayed, or otherwise inconvenienced. "
-            "Returns source text for determining meal, hotel, and ground "
-            "care entitlements. Use verified booking and disruption details with "
-            "these rules; do not invent eligibility or amounts. This read-only tool "
-            "does not require a seat hold or confirmation token, issue vouchers, "
-            "or replace check_policy and its policy_row_id."
+            "you wait', to answer a customer's general question about what care "
+            "they're owed, e.g. 'what do you cover for a delay like this?' or 'am I "
+            "entitled to a hotel?' Call this when the customer asks before you have "
+            "run check_policy, or to explain the rule behind a decision check_policy "
+            "already made. Takes no arguments, unlike check_policy, so it never "
+            "requires cause_code, delay_minutes, or status first. Returns source "
+            "text for determining meal, hotel, and ground care entitlements. Use "
+            "verified booking and disruption details with these rules; do not invent "
+            "eligibility or amounts. This read-only tool does not require a seat "
+            "hold or confirmation token, issue vouchers, or replace check_policy and "
+            "its policy_row_id: check_policy is still the source of truth for the "
+            "final eligibility, cap, and policy_row_id used to issue a voucher."
         ),
         "input_schema": {"type": "object", "properties": {}, "additionalProperties": False},
     }
