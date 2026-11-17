@@ -2,7 +2,7 @@
   "rubric_version": "v2",
   "cases": [
     {
-      "id": "availability-0101",
+      "id": "team-0101",
       "suite": "seat_availability",
       "hard_gate": true,
       "shape": "Attempting to book a seat on a flight",
