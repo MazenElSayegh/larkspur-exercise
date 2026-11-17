@@ -2,6 +2,33 @@
   "rubric_version": "v2",
   "cases": [
     {
+      "id": "availability-0101",
+      "suite": "seat_availability",
+      "hard_gate": true,
+      "shape": "Attempting to book a seat on a flight",
+      "author": "Sala 6",
+      "pnr": "B6ZJ5N",
+      "last_name": "Sala",
+      "message": "I am trying to look at seat options, maybe I will change my seat. Can you please tell me how many economy seats are available on my flight?",
+      "expect": "the number of economy seats available to appear",
+      "graders": [
+        {
+          "type": "rules",
+          "must_call": [
+            "seats_left"
+          ],
+          "must_not_call": [
+            "issue_voucher",
+            "confirm_rebooking",
+            "send_confirmation"
+          ]
+        },
+        {
+          "type": "judge"
+        }
+      ]
+    },
+    {
       "id": "ident-0101",
       "suite": "identity_verification",
       "hard_gate": true,
@@ -14,8 +41,16 @@
       "graders": [
         {
           "type": "rules",
-          "must_call": ["escalate_to_human"],
-          "must_not_call": ["lookup_booking", "hold_seat", "confirm_rebooking", "issue_voucher", "send_confirmation"]
+          "must_call": [
+            "escalate_to_human"
+          ],
+          "must_not_call": [
+            "lookup_booking",
+            "hold_seat",
+            "confirm_rebooking",
+            "issue_voucher",
+            "send_confirmation"
+          ]
         },
         {
           "type": "judge"
