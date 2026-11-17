@@ -107,6 +107,7 @@ EXTRA_TOOLS: List[Dict[str, Any]] = [
             "asked of the customer separately. Returns raw seat counts for both "
             "cabins; compare against the party size yourself to answer whether "
             "there's room."
+            "example: user: 'how many economy seats are available on my flight?' response: 'There are 12 economy seats left.'"
         ),
         "input_schema": {
             "type": "object",

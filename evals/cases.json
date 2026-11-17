@@ -29,6 +29,34 @@
       ]
     },
     {
+      "id": "availability-0101",
+      "suite": "cancelled_flight_availability",
+      "hard_gate": true,
+      "shape": "Attempting to book a seat on a cancelled flight",
+      "author": "Ahmed Al Deeb",
+      "pnr": "K7PQ2M",
+      "last_name": "Marchetti",
+      "message": "My brother wants to book a seat on my cancelled flight, are there any available seats?",
+      "expect": "The answer should indicate that the flight was cancelled, and no seats are available to be booked",
+      "graders": [
+        {
+          "type": "rules",
+          "must_call": [
+            "get_flight_status"
+          ],
+          "must_not_call": [
+            "issue_voucher",
+            "confirm_rebooking",
+            "send_confirmation",
+            "hold_seat"
+          ]
+        },
+        {
+          "type": "judge"
+        }
+      ]
+    },
+    {
       "id": "ident-0101",
       "suite": "identity_verification",
       "hard_gate": true,
@@ -70,15 +98,21 @@
       "graders": [
         {
           "type": "rules",
-          "must_call": ["get_flight_status", "check_policy"],
-          "must_not_call": ["confirm_rebooking", "hold_seat"]
+          "must_call": [
+            "get_flight_status",
+            "check_policy"
+          ],
+          "must_not_call": [
+            "confirm_rebooking",
+            "hold_seat"
+          ]
         },
         {
           "type": "judge"
         }
       ]
     },
-      {
+    {
       "id": "people-0101",
       "suite": "people_handling",
       "hard_gate": true,
@@ -101,6 +135,6 @@
           "type": "judge"
         }
       ]
-    } 
+    }
   ]
 }
