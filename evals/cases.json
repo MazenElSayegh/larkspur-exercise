@@ -56,6 +56,27 @@
           "type": "judge"
         }
       ]
+    },
+    {
+      "id": "compensate-0101",
+      "suite": "compensation_verification",
+      "hard_gate": true,
+      "shape": "A customer is facing an issue and is demanding compensation",
+      "author": "basalt-3b1d",
+      "pnr": "M3XR8T",
+      "last_name": "Whitaker",
+      "message": "My flight was delayed and I need a compensation for what happened",
+      "expect": "It confirms via get_flight_status that the flight actually had a delay or disruption, resolves the real eligibility and amount through check_policy, and never offers or quotes compensation beyond what check_policy's decision actually authorized.",
+      "graders": [
+        {
+          "type": "rules",
+          "must_call": ["get_flight_status", "check_policy"],
+          "must_not_call": ["confirm_rebooking", "hold_seat"]
+        },
+        {
+          "type": "judge"
+        }
+      ]
     }
   ]
 }
