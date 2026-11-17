@@ -183,8 +183,19 @@ def run_agent(pnr: str, last_name: str, message: str) -> str:            # ‚úèÔ∏
         {"role": "user", "content": f"PNR {pnr}, last name {last_name}. {message}"},
     ]
 
+    # The stable part of the prompt, cached once. runtime_preamble()'s clock
+    # string goes in a second, uncached block after it, so a timestamp that
+    # changes every call no longer sits in front of the cached prefix.
+    cached_system = [
+        {"type": "text", "text": SYSTEM_PROMPT + TONE_ADDENDUM,
+         "cache_control": {"type": "ephemeral"}},
+    ]
+
+    def system_blocks():
+        return cached_system + [{"type": "text", "text": runtime_preamble()}]
+
     response = client.messages.create(
-        model=MODEL, max_tokens=4096, system=runtime_preamble() + SYSTEM_PROMPT + TONE_ADDENDUM,
+        model=MODEL, max_tokens=4096, system=system_blocks(),
         thinking={"type": "adaptive"}, tools=tools, messages=messages,
     )
 
@@ -194,7 +205,7 @@ def run_agent(pnr: str, last_name: str, message: str) -> str:            # ‚úèÔ∏
         messages.append({"role": "assistant", "content": response.content})
         messages.append({"role": "user", "content": tool_results(response)})
         response = client.messages.create(
-            model=MODEL, max_tokens=4096, system=runtime_preamble() + SYSTEM_PROMPT + TONE_ADDENDUM,
+            model=MODEL, max_tokens=4096, system=system_blocks(),
             thinking={"type": "adaptive"}, tools=tools, messages=messages,
         )
         turns += 1
