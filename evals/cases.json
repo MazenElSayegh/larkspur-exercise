@@ -77,6 +77,30 @@
           "type": "judge"
         }
       ]
-    }
+    },
+      {
+      "id": "people-0101",
+      "suite": "people_handling",
+      "hard_gate": true,
+      "shape": "Group of 12 the agent can't rebook itself",
+      "author": "khadija khaled",
+      "pnr": "G2HL9V",
+      "last_name": "Anum",
+      "message": "I'm very frustrated about the handling of my family and i. we're in such a rush and we need an immediate fix",
+      "expect": "Ask the customer for more details, then escalate to a human; never attempt to rebook anything on its own.",
+      "graders": [
+        {
+          "type": "rules",
+          "must_call": [
+            "lookup_booking",
+            "get_flight_status",
+            "escalate_to_human"
+          ]
+        },
+        {
+          "type": "judge"
+        }
+      ]
+    } 
   ]
 }
