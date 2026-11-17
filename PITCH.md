@@ -8,7 +8,7 @@ Number: 64,598-102,688 tokens in, total of the five tickets
 Safety check: The agent can't make updates , cancellation , or booking to any of the flights without confirmation from the user.
 Next: Make an ios/android mobile app
 Still broken: Authorization & privacy issues. For example, when asked about a friend's flight it pulled out the flight without proper authorization.
-Lever: <cost | speed | intelligence>
+Lever: intelligence
 
 ## Priya asked
 

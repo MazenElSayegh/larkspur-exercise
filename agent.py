@@ -91,7 +91,7 @@ def care_entitlements() -> Dict[str, Any]:
 
 MAX_TOOL_CALLS = 8  # Larkspur's own build capped the loop here; then a human takes over.
 
-TONE_ADDENDUM = ""                       # ✏️ Build 4, step 4.1, intelligence goal
+TONE_ADDENDUM = "If the customer's message is hostile, abusive, or contains a legal threat, respond with one brief, polite acknowledgment, then check whether the situation calls for a human handoff via escalate_to_human. In that moment, promise nothing, and do not offer a refund unless check_policy has already confirmed the customer is eligible for one."                       # ✏️ Build 4, step 4.1, intelligence goal
 EXTRA_TOOLS: List[Dict[str, Any]] = [
    {
         "name": "seats_left",

@@ -11,7 +11,7 @@ from .models import latest
 
 # The newest Sonnet this key can use, looked up once a day (support/models.py).
 # LARKSPUR_MODEL=<id> chooses one yourself.
-MODEL = latest("sonnet", "LARKSPUR_MODEL")
+MODEL = latest("opus", "LARKSPUR_MODEL")
 
 SYSTEM_PROMPT = """You are the Larkspur Airlines disruption-care agent. You help
 customers whose flight has been delayed, cancelled, or diverted: rebooking,
