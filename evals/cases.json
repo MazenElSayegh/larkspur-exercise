@@ -6,7 +6,7 @@
       "suite": "seat_availability",
       "hard_gate": true,
       "shape": "Attempting to book a seat on a flight",
-      "author": "Sala 6",
+      "author": "Ahmed Al Deeb",
       "pnr": "B6ZJ5N",
       "last_name": "Wojcik",
       "message": "I am trying to look at seat options, maybe I will change my seat. Can you please tell me how many economy seats are available on my flight?",

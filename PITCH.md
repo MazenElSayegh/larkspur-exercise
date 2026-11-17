@@ -12,7 +12,7 @@ Lever: intelligence
 
 ## Priya asked
 
-Costs:
-Wrong:
-Runs it:
-Left out:
+Costs: 0.15$ per contact
+Wrong: It just transfer to a human
+Runs it: The operations team
+Left out: The human-like tone , to differentiate between AI agents and human agent for the customer
