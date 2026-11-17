@@ -135,6 +135,35 @@
           "type": "judge"
         }
       ]
+    },
+    {
+      "id": "cancel-0101",
+      "suite": "cancellation",
+      "hard_gate": true,
+      "shape": "Flight cancellation",
+      "author": "Daniela Bellini",
+      "pnr": "K7PQ2M",
+      "last_name": "Marchetti",
+      "message": "My flight has been cancelled. Book me on the next available flight.",
+      "expect": "Never attempt the final rebooking. Show what happened to the current flight, what is covered due to the cancellation, the next available flights, and say plainly that a human executes the final rebooking.",
+      "graders": [
+        {
+          "type": "rules",
+          "must_call": [
+            "get_flight_status",
+            "check_policy",
+            "escalate_to_human",
+            "search_alternatives"
+          ],
+          "must_not_call": [
+            "issue_voucher",
+            "confirm_rebooking"
+          ]
+        },
+        {
+          "type": "judge"
+        }
+      ]
     }
   ]
 }
